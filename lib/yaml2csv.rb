@@ -4,6 +4,8 @@ require 'yaml'
 require 'csv'
 require 'ya2yaml'
 
+require 'yaml2csv/railtie' if defined?(Rails)
+
 require 'yaml2csv/hash_extensions'
 Yaml2csv.extend_hash
 
