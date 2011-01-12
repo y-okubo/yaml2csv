@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    yaml2csv (0.0.2)
+    yaml2csv (0.0.3)
       ya2yaml (~> 0.30)
 
 GEM

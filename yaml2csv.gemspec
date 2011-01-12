@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.files        = `git ls-files`.split("\n")
   s.test_files   = `git ls-files -- spec/*`.split("\n")
 
-  s.version = '0.0.2'
+  s.version = '0.0.3'
   s.platform = Gem::Platform::RUBY
   s.required_ruby_version = '>= 1.8.6'
   s.required_rubygems_version = '>= 1.3.5'
@@ -23,5 +23,5 @@ Gem::Specification.new do |s|
     s.add_development_dependency lib, version
   end
 
-  s.add_dependency 'ya2yaml', '~> 0.30'
+  s.add_runtime_dependency 'ya2yaml', '~> 0.30'
 end
