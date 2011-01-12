@@ -24,24 +24,25 @@ YAML source files should contain only hashes and string values. While non-string
 values (i.e. arrays, booleans) are allowed, they will be treated as strings 
 thus their original format will be lost.
 
-== Dependencies
-
-ya2yaml: http://github.com/ptb/ya2yaml/tree/master
-
 == Usage 
 
-=== As Ruby module
+=== As a gem
 
-    require 'yaml2csv'
-    Yaml2csv::yaml2csv(string, :field_separator => ';')
-    Yaml2csv::csv2yaml(string)
+In your Gemfile:
 
-=== From command line
+    gem 'yaml2csv'
 
-Convert file.yaml into CSV format:
+In your code:
 
-    $ yaml2csv file.yml
+    output_string = Yaml2csv::yaml2csv(input_string)
+    output_string = Yaml2csv::csv2yaml(input_string)
 
-Convert file.csv into YAML format (using ';' as field separator)
+=== rake task
 
-    $ yaml2csv -f";" -r file.csv
+Convert file.yml into CSV format:
+
+    $ rake yaml2csv:yaml2csv INPUT=file.yml OUTPUT=file.csv
+
+Convert file.csv into YAML format
+
+    $ rake yaml2csv:csv2yaml INPUT=file.csv OUTPUT=file.yml
