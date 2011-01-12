@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email = "benhutton@gmail.com"
   s.require_path = "lib"
   s.files        = `git ls-files`.split("\n")
-  s.test_files   = `git ls-files -- test/*`.split("\n")
+  s.test_files   = `git ls-files -- spec/*`.split("\n")
 
   s.version = '0.0.1'
   s.platform = Gem::Platform::RUBY
