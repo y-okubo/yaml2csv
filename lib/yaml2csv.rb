@@ -52,4 +52,16 @@ module Yaml2csv
 
     array
   end
+
+  # Convert a string containing CSV values to a hash
+  def self.csv2hash(csvdata, column, options = {})
+    walk_array = []
+
+    CSV.parse(csvdata) do |row|
+      walk_array << [row[0].split(".").map(&:to_s), '', row[column].to_s]
+    end
+
+    hash = Hash.unwalk_from_array(walk_array)
+    hash.ya2yaml.gsub(/\s+$/, '') + "\n"
+  end  
 end
