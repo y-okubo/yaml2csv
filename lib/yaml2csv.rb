@@ -64,6 +64,7 @@ module Yaml2csv
       value = row[column].to_s
       if block_given?
         value = yield(key, path, value)
+        value = row[column].to_s if value.nil?
       end
       walk_array << [path.map(&:to_s), key.to_s, value]
     end
