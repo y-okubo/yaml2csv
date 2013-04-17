@@ -33,4 +33,22 @@ module Yaml2csv
     hash = Hash.unwalk_from_array(walk_array)
     hash.ya2yaml.gsub(/\s+$/, '') + "\n"
   end  
+
+  # Convert a string containing YAML data to an array
+  def self.yaml2array(yamldata, language, options = {})
+    hash = YAML::load(yamldata)[language]
+    array = Array.new
+
+    hash.to_enum(:walk).each do |path, key, value|
+      strvalue = value.is_a?(String) ? value : value.inspect
+      dot_path = path.join(".")
+      if dot_path.length <= 0
+        array << [key, strvalue]
+      else
+        array << [dot_path + '.' + key , strvalue]
+      end
+    end
+
+    array
+  end
 end
