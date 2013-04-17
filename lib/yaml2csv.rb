@@ -61,7 +61,12 @@ module Yaml2csv
       full_path = [prefix].concat(row[0].split("."))
       key = full_path.pop # 破壊的
       path = full_path
-      walk_array << [path.map(&:to_s), key.to_s, row[column].to_s]
+      if block_given?
+        value = yield(key, path)
+      else
+        value = row[column].to_s if value.nil?
+      end
+      walk_array << [path.map(&:to_s), key.to_s, value]
     end
 
     hash = Hash.unwalk_from_array(walk_array)
