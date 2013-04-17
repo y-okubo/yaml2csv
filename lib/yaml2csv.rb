@@ -54,11 +54,14 @@ module Yaml2csv
   end
 
   # Convert a string containing CSV values to a hash
-  def self.csv2hash(csvdata, column, options = {})
+  def self.csv2hash(csvdata, column, prefix, options = {})
     walk_array = []
 
-    CSV.parse(csvdata) do |row|
-      walk_array << [row[0].split(".").map(&:to_s), '', row[column].to_s]
+    CSV.parse(csvdata, {:headers => true}) do |row|
+      full_path = [prefix].concat(row[0].split("."))
+      key = full_path.pop # 破壊的
+      path = full_path
+      walk_array << [path.map(&:to_s), key.to_s, row[column].to_s]
     end
 
     hash = Hash.unwalk_from_array(walk_array)
