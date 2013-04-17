@@ -41,6 +41,7 @@ module Yaml2csv
 
     hash.to_enum(:walk).each do |path, key, value|
       strvalue = value.is_a?(String) ? value : value.inspect
+      strvalue = strvalue == 'nil' ? '' : strvalue
       dot_path = path.join(".")
       if dot_path.length <= 0
         array << [key, strvalue]
