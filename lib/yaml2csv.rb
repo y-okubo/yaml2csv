@@ -73,14 +73,17 @@ module Yaml2csv
       key = full_path.pop # 破壊的
       path = full_path
       value = row[column].to_s
+
       if block_given?
         value = yield(key, path, value)
         value = row[column].to_s if value.nil?
       end
+      
       walk_array << [path.map(&:to_s), key.to_s, value]
     end
 
     hash = Hash.unwalk_from_array(walk_array)
-    hash.ya2yaml.gsub(/\s+$/, '') + "\n"
+    data = hash.ya2yaml.gsub(/\s+$/, '') + "\n"
+    data.sub(/^---\n/,'')
   end  
 end
