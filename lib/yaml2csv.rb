@@ -43,6 +43,10 @@ module Yaml2csv
       strvalue = value.is_a?(String) ? value : value.inspect
       strvalue = strvalue == 'nil' ? '' : strvalue
       dot_path = path.join(".")
+      if block_given?
+        tmpvalue = yield(key, path, strvalue)
+        strvalue = tmpvalue.to_s unless tmpvalue.nil?
+      end
       if dot_path.length <= 0
         array << [key, strvalue]
       else
