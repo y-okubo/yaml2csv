@@ -15,11 +15,9 @@ namespace :yaml2csv do
   desc "Convert a csv into a yaml file"
   task :csv2yaml do
     input = File.read(ENV['INPUT'])
-    yaml_output = Yaml2csv::csv2hash(input, 5, 'ja') do |key, path|
-      key + "2"
-    end
+    yaml_output = Yaml2csv::csv2yaml(input)
     if !ENV['OUTPUT'].nil?
-      File.open(ENV['OUTPUT'], 'w') {|f| f.write(yaml_output.sub(/---\n/,'')) }
+      File.open(ENV['OUTPUT'], 'w') {|f| f.write(yaml_output) }
     else
       puts yaml_output
     end
