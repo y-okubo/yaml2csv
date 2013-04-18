@@ -80,7 +80,7 @@ module Yaml2csv
 
       if block_given?
         tmpvalue = yield(key, path, strvalue)
-        strvalue = row[options[:value_colnum].to_i].to_s if tmpvalue.nil?
+        strvalue = tmpvalue.to_s unless tmpvalue.nil?
       end
       
       walk_array << [path.map(&:to_s), key.to_s, strvalue]
