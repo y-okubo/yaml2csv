@@ -35,7 +35,7 @@ module Yaml2csv
   end  
 
   # Convert a string containing YAML data to an array
-  def self.yaml2array(yamldata, options = {:base_key => nil})
+  def self.yaml2array(yamldata, options = {:base_key => nil}, &block)
     if options[:base_key].nil?
       hash = YAML::load(yamldata)
     else
@@ -49,8 +49,8 @@ module Yaml2csv
       strvalue = strvalue == 'nil' ? '' : strvalue  # TODO: Use regexp
       dotted_path = path.join(".")
 
-      if block_given?
-        tmpvalue = yield(key, path, strvalue)
+      unless block.nil?
+        tmpvalue = block.call(key, path, strvalue)
         strvalue = tmpvalue.to_s unless tmpvalue.nil?
       end
 
