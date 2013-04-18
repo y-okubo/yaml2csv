@@ -38,30 +38,30 @@ module Yaml2csv
   def self.yaml2array(yamldata, options = {})
     if options.has_key?(:language)
       hash = YAML::load(yamldata)[options[:language]]
+    else
+      hash = YAML::load(yamldata)
+    end
 
-      hash.to_enum(:walk).each do |path, key, value|
-        strvalue = value.is_a?(String) ? value : value.inspect
-        strvalue = strvalue == 'nil' ? '' : strvalue
-        dotted_path = path.join(".")
-  
-        if block_given?
-          tmpvalue = yield(key, path, strvalue)
-          strvalue = tmpvalue.to_s unless tmpvalue.nil?
-        end
-  
-        array = Array.new
-  
-        if dotted_path.length <= 0
-          array << [key, strvalue]
-        else
-          array << [dotted_path + '.' + key , strvalue]
-        end
+    hash.to_enum(:walk).each do |path, key, value|
+      strvalue = value.is_a?(String) ? value : value.inspect
+      strvalue = strvalue == 'nil' ? '' : strvalue  # TODO: Use regexp
+      dotted_path = path.join(".")
+
+      if block_given?
+        tmpvalue = yield(key, path, strvalue)
+        strvalue = tmpvalue.to_s unless tmpvalue.nil?
       end
 
-      array      
-    else
-      nil
+      array = Array.new
+
+      if dotted_path.length <= 0
+        array << [key, strvalue]
+      else
+        array << [dotted_path + '.' + key , strvalue]
+      end
     end
+
+    array
   end
 
   # Convert a string containing CSV values to a hash
