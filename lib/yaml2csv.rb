@@ -64,14 +64,21 @@ module Yaml2csv
     array
   end
 
-  # Convert a string containing CSV values to a hash
-  def self.csv2hash(csvdata, column, prefix, options = {})
+  # Convert a string containing CSV values to a data
+  def self.csv2data(csvdata, options = {})
     walk_array = []
 
+    value_column = options.has_key?(:value_column) ? options[:value_column] : 2
+    path_prefix = options.has_key?(:path_prefix) ? options[:path_prefix] : nil
+
     CSV.parse(csvdata, {:headers => true}) do |row|
-      full_path = [prefix].concat(row[0].split("."))
-      key = full_path.pop # 破壊的
-      path = full_path
+      if path_prefix.nil?
+        path = row[0].split(".")
+      else
+        path = [path_prefix].concat(row[0].split("."))
+      end
+      
+      key = path.pop # destructive
       value = row[column].to_s
 
       if block_given?
