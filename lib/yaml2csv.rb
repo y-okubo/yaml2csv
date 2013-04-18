@@ -35,11 +35,11 @@ module Yaml2csv
   end  
 
   # Convert a string containing YAML data to an array
-  def self.yaml2array(yamldata, options = {})
-    if options.has_key?(:language)
-      hash = YAML::load(yamldata)[options[:language]]
-    else
+  def self.yaml2array(yamldata, options = {:base_key => nil})
+    if options[:base_key].nil?
       hash = YAML::load(yamldata)
+    else
+      hash = YAML::load(yamldata)[options[:base_key]]
     end
 
     array = Array.new
@@ -65,28 +65,25 @@ module Yaml2csv
   end
 
   # Convert a string containing CSV values to a data
-  def self.csv2data(csvdata, options = {})
+  def self.csv2data(csvdata, options = {:header_added => false, :path_prefix => nil, :value_colnum => 1})
     walk_array = []
 
-    value_column = options.has_key?(:value_column) ? options[:value_column] : 2
-    path_prefix = options.has_key?(:path_prefix) ? options[:path_prefix] : nil
-
-    CSV.parse(csvdata, {:headers => true}) do |row|
-      if path_prefix.nil?
+    CSV.parse(csvdata, {:headers => options[:header_added]}) do |row|
+      if options[:path_prefix].nil?
         path = row[0].split(".")
       else
-        path = [path_prefix].concat(row[0].split("."))
+        path = [options[:path_prefix]].concat(row[0].split("."))
       end
       
       key = path.pop # destructive
-      value = row[value_column].to_s
+      strvalue = row[options[:value_colnum].to_i].to_s
 
       if block_given?
-        value = yield(key, path, value)
-        value = row[value_column].to_s if value.nil?
+        tmpvalue = yield(key, path, strvalue)
+        strvalue = row[options[:value_colnum].to_i].to_s if tmpvalue.nil?
       end
       
-      walk_array << [path.map(&:to_s), key.to_s, value]
+      walk_array << [path.map(&:to_s), key.to_s, strvalue]
     end
 
     hash = Hash.unwalk_from_array(walk_array)
