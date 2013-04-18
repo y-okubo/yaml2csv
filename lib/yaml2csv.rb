@@ -42,6 +42,8 @@ module Yaml2csv
       hash = YAML::load(yamldata)
     end
 
+    array = Array.new
+
     hash.to_enum(:walk).each do |path, key, value|
       strvalue = value.is_a?(String) ? value : value.inspect
       strvalue = strvalue == 'nil' ? '' : strvalue  # TODO: Use regexp
@@ -51,8 +53,6 @@ module Yaml2csv
         tmpvalue = yield(key, path, strvalue)
         strvalue = tmpvalue.to_s unless tmpvalue.nil?
       end
-
-      array = Array.new
 
       if dotted_path.length <= 0
         array << [key, strvalue]
